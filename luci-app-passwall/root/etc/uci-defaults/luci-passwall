@@ -30,11 +30,13 @@ EOF
 touch /etc/config/passwall_show >/dev/null 2>&1
 [ ! -s "/etc/config/passwall" ] && cp -f /usr/share/passwall/0_default_config /etc/config/passwall
 
-chmod +x /etc/init.d/passwall
-chmod +x /etc/init.d/passwall_server
-chmod +x /etc/hotplug.d/iface/98-passwall
-chmod +x /usr/share/passwall/*.sh 
-
+chmod 775 /usr/share/passwall/subscribe.lua
+chmod 775 /usr/share/passwall/app.sh
+chmod 775 /usr/share/passwall/haproxy_check.sh
+chmod 775 /usr/share/passwall/iptables.sh
+chmod 775 /usr/share/passwall/monitor.sh
+chmod 775 /etc/init.d/passwall
+chmod 775 /etc/init.d/passwall_server
 
 use_nft=$(uci -q get passwall.@global_forwarding[0].use_nft || echo "0")
 [ "${use_nft}" = "0" ] && {
