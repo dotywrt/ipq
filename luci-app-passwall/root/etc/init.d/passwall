@@ -1,0 +1,91 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+STOP=15
+PROG=passwall
+
+CONFIG=$PROG
+APP_FILE=/usr/share/${CONFIG}/app.sh
+LOCK_FILE_DIR=/var/lock
+LOCK_FILE=${LOCK_FILE_DIR}/${CONFIG}.lock
+READY_FILE=${LOCK_FILE_DIR}/${CONFIG}_ready.lock
+
+# Create lock (using directory method for OpenWrt compatibility)
+set_lock() {
+	[ ! -d "$LOCK_FILE_DIR" ] && mkdir -p "$LOCK_FILE_DIR"
+	if ! mkdir "$LOCK_FILE" 2>/dev/null; then
+		# Lock already exists
+		return 1
+	fi
+}
+
+# Remove lock
+unset_lock() {
+	rm -rf "$LOCK_FILE"
+}
+
+# Wait for lock to be released, then remove it
+unlock() {
+	failcount=1
+	while [ "$failcount" -le 10 ]; do
+		if [ -d "$LOCK_FILE" ]; then
+			let "failcount++"
+			sleep 1
+			[ "$failcount" -ge 10 ] && unset_lock
+		else
+			break
+		fi
+	done
+}
+
+# Runs at boot
+boot() {
+	local delay=$(uci -q get ${CONFIG}.@global_delay[0].start_delay || echo 1)
+	if [ "$delay" -gt 0 ]; then
+		$APP_FILE echolog "Delaying start by $delay seconds..."
+		sleep $delay
+	fi
+	restart
+	touch "$READY_FILE"
+}
+
+# Start the service
+start() {
+	set_lock || {
+		$APP_FILE echolog "Script is already running. Exiting."
+		return 1
+	}
+	$APP_FILE start
+	unset_lock
+}
+
+# Stop the service
+stop() {
+	unlock
+	set_lock || {
+		$APP_FILE echolog "Timeout waiting to stop script. Exiting."
+		return 1
+	}
+	$APP_FILE stop
+	unset_lock
+}
+
+# Restart the service
+restart() {
+	set_lock || {
+		$APP_FILE echolog "Script is already running. Exiting."
+		return 1
+	}
+	$APP_FILE stop
+	$APP_FILE start
+	unset_lock
+}
+
+# LuCI compatibility
+start_service() {
+	start
+}
+
+stop_service() {
+	stop
+}
