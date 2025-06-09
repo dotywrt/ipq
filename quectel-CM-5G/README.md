@@ -1,0 +1,1 @@
+# quectel-CM-5G

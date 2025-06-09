@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Set 775 (executable) permissions for passwall scripts
+for file in /usr/share/passwall/*.sh /usr/share/passwall/subscribe.lua /etc/init.d/passwall /etc/init.d/passwall_server; do
+    [ -f "$file" ] && chmod 775 "$file"
+done
+
+exit 0
