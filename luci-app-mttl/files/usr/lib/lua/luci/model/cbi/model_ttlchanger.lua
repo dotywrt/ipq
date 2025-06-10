@@ -147,7 +147,10 @@ function m.on_commit(map)
         updated = updated .. "\n"
     end
 
+    -- Save updated nftables rules
     fs.writefile(config_file, updated .. "\n" .. new_rules .. "\n")
+    sys.call("/etc/init.d/firewall restart")
+    sys.call("/etc/init.d/network restart")
     sys.call('echo "AT+CFUN=1" > /dev/ttyUSB3')
 end
 
