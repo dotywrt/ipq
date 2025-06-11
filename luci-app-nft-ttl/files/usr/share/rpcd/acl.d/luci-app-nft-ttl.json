@@ -1,0 +1,12 @@
+{
+  "luci-app-nft-ttl": {
+    "description": "Grant access to TTL/HopLimit settings",
+    "read": {
+      "uci": ["nftttl"]
+    },
+    "write": {
+      "uci": ["nftttl"]
+    }
+  }
+}
+
