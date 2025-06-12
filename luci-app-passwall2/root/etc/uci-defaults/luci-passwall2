@@ -35,6 +35,7 @@ EOF
 
 chmod +x /usr/share/passwall2/*.sh
 chmod +x /etc/init.d/passwall2
+chmod +x /etc/init.d/passwall2_server
 
 [ -e "/etc/config/passwall2_show" ] && rm -rf /etc/config/passwall2_show
 
