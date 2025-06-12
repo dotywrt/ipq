@@ -1,18 +1,14 @@
 local fs = require "nixio.fs"
 local uci = require "luci.model.uci".cursor()
 
-local m = Map("nftttl", translate("TTL Settings"))  -- <- MUST come before using `m`
+local m = Map("nftttl", translate("TTL Settings"))
 
--- Add support/info section with custom template
 local support = m:section(SimpleSection)
 support.template = "admin_support_info"
 
 local s = m:section(NamedSection, "ttl", "ttl", translate("Settings"))
 s.addremove = false
-
 s:option(Flag, "enabled", translate("Enable"))
-
- 
 
 local val = s:option(Value, "value", translate("TTL / HopLimit Value"))
 val.datatype = "uinteger"
@@ -22,14 +18,12 @@ val.description = translate("Set the TTL (IPv4) / HopLimit (IPv6) value. Default
     "After setting, click 'Save & Apply' — the firewall will auto-reload the rule.")
 
 
--- Save/commit logic
 function m.on_commit(map)
     local enabled = uci:get("nftttl", "ttl", "enabled")
     local value = uci:get("nftttl", "ttl", "value") or "64"
     local nft_dir = "/etc/nftables.d/"
     local outfile = nft_dir .. "ttl64.nft"
 
-    -- Remove old .nft files
     for f in fs.dir(nft_dir) do
         if f:match("%.nft$") and f ~= "ttl64.nft" and f ~= "README" then
             fs.remove(nft_dir .. f)
