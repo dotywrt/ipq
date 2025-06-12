@@ -34,6 +34,7 @@ EOF
 [ ! -s "/etc/config/passwall2" ] && cp -f /usr/share/passwall2/0_default_config /etc/config/passwall2
 
 chmod +x /usr/share/passwall2/*.sh
+chmod +x /etc/init.d/passwall2
 
 [ -e "/etc/config/passwall2_show" ] && rm -rf /etc/config/passwall2_show
 
