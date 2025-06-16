@@ -9,4 +9,9 @@ rm -f /tmp/luci-indexcache
 
 chmod +x /etc/init.d/tailscale
 
+uci set tailscale.@tailscale[0].enabled='1'
+uci commit tailscale
+
+/etc/init.d/tailscale restart
+
 exit 0
