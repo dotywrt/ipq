@@ -15,5 +15,6 @@ uci set tailscale.@tailscale[0].enabled='1'
 uci commit tailscale
 
 /etc/init.d/tailscale restart
+etc/init.d/tailscale stop
 
 exit 0
