@@ -7,7 +7,9 @@ EOF
 
 rm -f /tmp/luci-indexcache
 
-chmod +x /etc/init.d/tailscale
+chmod 755 /etc/init.d/tailscale
+chmod 755 /usr/sbin/tailscale_helper
+chmod 755 /etc/hotplug.d/iface/40-tailscale
 
 uci set tailscale.@tailscale[0].enabled='1'
 uci commit tailscale
