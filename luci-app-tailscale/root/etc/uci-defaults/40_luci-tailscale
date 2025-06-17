@@ -1,20 +1,13 @@
 #!/bin/sh
 
+chmod 755 /etc/init.d/tailscale
+chmod 755 /usr/sbin/tailscale_helper
+chmod 755 /etc/hotplug.d/iface/40-tailscale
+
 uci -q batch <<-EOF >/dev/null
 	delete ucitrack.@tailscale[-1]
 	commit ucitrack
 EOF
 
 rm -f /tmp/luci-indexcache
-
-chmod 755 /etc/init.d/tailscale
-chmod 755 /usr/sbin/tailscale_helper
-chmod 755 /etc/hotplug.d/iface/40-tailscale
-
-uci set tailscale.@tailscale[0].enabled='1'
-uci commit tailscale
-
-/etc/init.d/tailscale restart
-etc/init.d/tailscale stop
-
 exit 0
