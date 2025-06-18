@@ -1,0 +1,15 @@
+{
+  "luci-app-ipt-ttl": {
+    "description": "Grant access to luci-app-ipt-ttl",
+    "read": {
+      "uci": [ "ipt_ttl" ]
+    },
+    "write": {
+      "uci": [ "ipt_ttl" ],
+      "file": {
+        "/etc/firewall.user": [ "read", "write" ],
+        "/usr/libexec/ipt_ttl.sh": [ "exec" ]
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+chmod +x /usr/libexec/ipt_ttl.sh
+
+rm -f /etc/firewall.user
+cat <<EOF > /etc/firewall.user
+# Created by luci-app-ipt-ttl (uci-defaults)
+iptables -t mangle -A PREROUTING -j TTL --ttl-set 64
+iptables -t mangle -A POSTROUTING -j TTL --ttl-set 64
+ip6tables -t mangle -A PREROUTING -i wwan0 -j HL --hl-set 64
+ip6tables -t mangle -A POSTROUTING -o wwan0 -j HL --hl-set 64
+ip6tables -t mangle -A PREROUTING -i wwan0_1 -j HL --hl-set 64
+ip6tables -t mangle -A POSTROUTING -o wwan0_1 -j HL --hl-set 64
+EOF
+
+/etc/init.d/firewall reload 2>/dev/null
+
+exit 0
