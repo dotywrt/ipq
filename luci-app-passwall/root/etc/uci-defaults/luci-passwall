@@ -37,6 +37,7 @@ chmod 775 /usr/share/passwall/iptables.sh
 chmod 775 /usr/share/passwall/monitor.sh
 chmod 775 /etc/init.d/passwall
 chmod 775 /etc/init.d/passwall_server
+chmod 775 /usr/share/passwall/test.sh
 
 use_nft=$(uci -q get passwall.@global_forwarding[0].use_nft || echo "0")
 [ "${use_nft}" = "0" ] && {
